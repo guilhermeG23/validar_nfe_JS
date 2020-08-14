@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Validar NFE</title>
+	<style>
+		body {
+			margin: 2%;
+		}
+		body div input , body div button {
+			display: block;
+			width: 50%;
+			margin-top: 1%;
+			box-sizing: border-box;
+		}
+		body table {
+			display: none;
+		}
+		table {
+			width: min-content;
+		}
+		table tr , table th {
+			padding: 10px;
+		}
+	</style>
+	<script>
+	function validar_chave() {
+
+		//Input NFE
+		var nfe = document.getElementById("entrada_nfe").value;
+		var validade;
+		
+		document.getElementById("nfe_saida").innerHTML = "NFE: " + nfe;
+		
+		if (nfe.length == 44)  {
+
+			var verificador = nfe.substring(43, 44);
+			document.getElementById("UF").innerHTML = nfe.substring(0, 2);
+			document.getElementById("Ano-Mes").innerHTML = nfe.substring(2, 6);
+			document.getElementById("CNPJ").innerHTML = nfe.substring(6, 20);
+			document.getElementById("Modelo").innerHTML = nfe.substring(20, 22);
+			document.getElementById("Serie").innerHTML = nfe.substring(22, 25);
+			document.getElementById("Numero").innerHTML = nfe.substring(25, 34);
+			document.getElementById("Codigo").innerHTML = nfe.substring(34, 43);
+			document.getElementById("Validador").innerHTML = verificador;
+			
+			var inicio = 2;
+			var conta_final = 0;
+
+			//0, 43
+			for (var i = 42; i >= 0; i--) {
+				conta_final = conta_final + (nfe[i] * inicio);
+				inicio++;
+				if (inicio == 10) {
+					inicio = 2;
+				}
+			}
+
+			resto_divisao = conta_final % 11;
+			
+			confirmar_verificador = 11 - resto_divisao;
+
+			if (verificador == confirmar_verificador) {
+				validade = "Chave está correta";	
+			} else {
+				validade = "Chave incorreta";	
+			}
+
+
+			document.getElementById("entrada_nfe").value = "";
+			document.getElementById("campo_saida").innerHTML = "Validade: " + validade;
+			document.getElementById("nfe_saida").style.display = "block";
+			document.getElementById("campo_saida").style.display = "block";
+			document.getElementById("mensagem").style.display = "None";
+			document.getElementById("tabela_demo").style.display = "block";
+		} else {
+			document.getElementById("mensagem").innerHTML = "NFE não está correto, confira o valor";
+			document.getElementById("nfe_saida").style.display = "None";
+			document.getElementById("campo_saida").style.display = "None";
+			document.getElementById("mensagem").style.display = "block";
+			document.getElementById("tabela_demo").style.display = "None";
+		}
+		return True;
+	}
+	</script>
+</head>
+<body>
+	<div>
+		<input type="text" value="" name="entrada_nfe" id="entrada_nfe" maxlength="44" placeholder="Entrada NFE">
+		<button onclick="validar_chave()">Validar NFE</button>
+		<hr>
+		<p id="mensagem"></p>
+		<p id="nfe_saida"></p>
+		<p id="campo_saida"></p>
+		<table border="1" id="tabela_demo">
+			<tr>
+				<th>UF</th>
+				<th>Ano-Mês</th>
+				<th>CNPJ</th>
+				<th>Modelo</th>
+				<th>Série</th>
+				<th>Número</th>
+				<th>Código</th>
+				<th>Validador</th>
+			</tr>
+			<tr>
+				<th id="UF"></th>
+				<th id="Ano-Mes"></th>
+				<th id="CNPJ"></th>
+				<th id="Modelo"></th>
+				<th id="Serie"</th>
+				<th id="Numero"></th>
+				<th id="Codigo"></th>
+				<th id="Validador"></th>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
